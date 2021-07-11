@@ -225,16 +225,12 @@ export function toRange(root, start, end) {
     
   }
 
-  if (!startContainer) {
-    throw new Error('invalid start offset');
-  }
-  if (!endContainer) {
-    throw new Error('invalid end offset');
-  }
-
   const range = root.ownerDocument.createRange();
-  range.setStart(startContainer, startOffset);
-  range.setEnd(endContainer, endOffset);
+  //conditional here to if container exists before calling it.
+  //usual reason a end container doesn't exist is the end number in the request does not exist in the paragraph 
+  // for example, asking for end word 40 when there are only 39 words in the paragraph
+  startContainer ? range.setStart(startContainer, startOffset) : console.log("no container or invalid end offset")
+  endContainer ? range.setEnd(endContainer, endOffset) : console.log("no container invalid end offset")
 
   return range;
 }
@@ -298,7 +294,6 @@ function getStringBeforeWord(text, word, instanceNumber, first) {
  */
 
 export function createRange(root, startContainer, startOffset, endContainer, endOffset){
-  console.log("endOffset", endOffset)
   const range = root.ownerDocument.createRange();
   range.setStart(startContainer, startOffset);
   range.setEnd(endContainer, endOffset);
@@ -312,8 +307,6 @@ export function getRangeWordCount(rng){
   var cnt = rng.cloneContents();
   $(cnt).find(".lbp-line-number, .paragraphnumber, br, .lbp-folionumber, .appnote, .footnote, .lbp-reg").remove();
   const selectionText = cleanText(cnt.textContent)
-  console.log("selectionText", selectionText)
-  console.log("precedingSelectionTextArray", selectionText.split(" ").filter(n=>n))
   const length = selectionText.split(" ").filter(n=>n).length
   return length;
 }
@@ -363,7 +356,6 @@ export function goToGitHubEdit(url, selectedText, selectedElementTargetId){
   const data = getLineNumber(url, selectedText, selectedElementTargetId)
   //https://github.com/scta-texts/plaoulcommentary/raw/master/lectio1/lectio1.xml
   data.then((d) => {
-    console.log(d)
     const editUrl = url.replace("raw", "edit") + "#L" + d
     window.open(editUrl,"gitHubEditWindow",'height=750,width=750');
     //window.open(editUrl, "_blank"); 

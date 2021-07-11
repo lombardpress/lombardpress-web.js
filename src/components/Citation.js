@@ -64,6 +64,7 @@ class Citation extends React.Component{
               }
             )
           }
+        //})
         }
       })
     }
@@ -85,7 +86,7 @@ class Citation extends React.Component{
   render(){
 
     const fullCitationString = this.state.authorTitle + ", " + this.state.etitle + "(" + this.state.mtitle + ") Data source: " + this.state.datasource + "."
-    const wordRange = this.props.selectionRange.wordRange && 
+    const wordRange = this.props.selectionRange && this.props.selectionRange.wordRange && 
       this.props.selectionRange.wordRange.start + "-" + this.props.selectionRange.wordRange.end;
     return (
       <Container>
